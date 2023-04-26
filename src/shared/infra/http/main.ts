@@ -3,20 +3,26 @@ import 'reflect-metadata';
 import 'dotenv/config';
 import express, { Express as Application } from 'express';
 import { createServer, Server as HttpServer } from "http";
-import {Server} from 'socket.io';
+import socketio from 'socket.io';
 import { router } from '../../routes';
+import {listen} from '../../../../socket';
+import cors from 'cors';
 
 class Main {
     public app: Application;
     public server: HttpServer
-    public io:  Server
+    public io: socketio.Server
     constructor() {
         this.app = express();
         this.server = createServer(this.app);
-        this.io = new Server(this.server, {
+        this.io = new socketio.Server(this.server, {
             maxHttpBufferSize: 1e8,
             pingTimeout: 200000,
-            path: 'api/socket'
+            cors: {
+                origin: '*',
+                methods: ['GET', 'POST']
+            },
+            path: '/apiws/socket.io'
         })
 
     }
@@ -26,16 +32,12 @@ class Main {
         this.socketIo()
     }
     private middlewares() {
-        this.app.set("trust proxy", 1);
+        this.app.use(cors());
         this.app.use(express.json());
-        this.app.use(express.urlencoded({ extended: true }));
-        this.app.use(express.static("public"));
 
     }
-    private socketIo():void {
-        this.io.on('connection', (socket) => {
-            console.log('a user connected', socket.id);
-          });
+    private socketIo(): void {
+        listen(this.io)
     }
     private routes(): void {
         this.app.use(router);
