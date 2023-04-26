@@ -1,6 +1,4 @@
 import { Router } from "express";
-import { listen } from "../../../socket";
-import { main } from "../infra/http/main";
 
 
 const router = Router();
