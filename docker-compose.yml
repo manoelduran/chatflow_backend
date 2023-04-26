@@ -20,7 +20,7 @@ services:
     container_name: chatflow_backend
     restart: always
     ports:
-      - "3333:3000"
+      - "3333:3333"
     volumes:
       - .:/app
     links:
