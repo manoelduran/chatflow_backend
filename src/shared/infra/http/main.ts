@@ -4,9 +4,12 @@ import 'dotenv/config';
 import express, { Express as Application } from 'express';
 import { createServer, Server as HttpServer } from "http";
 import socketio from 'socket.io';
-import { router } from '../../routes';
+import { router } from '@shared/infra/http/routes';
 import {listen} from '../../../../socket';
 import cors from 'cors';
+import '@shared/container';
+import { errors } from 'celebrate';
+import { httpExceptionHandler } from './middlewares/httpExceptionHandler';
 
 class Main {
     public app: Application;
@@ -30,12 +33,17 @@ class Main {
         this.middlewares()
         this.routes()
         this.socketIo()
+        this.exceptionHandler()
     }
     private middlewares() {
         this.app.use(cors());
         this.app.use(express.json());
 
     }
+    private exceptionHandler(): void {
+        this.app.use(errors());
+        this.app.use(httpExceptionHandler.handle);
+      }
     private socketIo(): void {
         listen(this.io)
     }

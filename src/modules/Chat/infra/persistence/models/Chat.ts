@@ -1,13 +1,16 @@
 import { Chat } from "@prisma/client";
+import { v4 as uuidV4 } from 'uuid';
 
 class ChatModel implements Chat {
-    id: string;
+    id!: string;
     name: string;
     created_at: Date;
     constructor(props: Chat) {
-        this.id = props.id
-        this.name = props.name
-        this.created_at = props.created_at
+        if (!this.id) {
+            this.id = uuidV4();
+            this.name = props.name
+            this.created_at = props.created_at
+        }
     }
 };
 
