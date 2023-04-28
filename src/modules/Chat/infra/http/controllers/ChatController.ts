@@ -8,9 +8,10 @@ import { CreateChatResponse } from "@modules/Chat/responses/CreateChatResponse";
 import { ChatAlreadyExistsException } from "@modules/Chat/exceptions/ChatAlreadyExistsException";
 import { CreateChatService } from "@modules/Chat/services/CreateChat/CreateChatService";
 import { ListChatsService } from "@modules/Chat/services/ListChats/ListChatsService";
+import { left, right } from "@shared/either";
 
 export class ChatController  {
-    constructor() {}
+
     public async list(request: Request, response: Response): Promise<Response> {
         const listChatsService = container.resolve<Service<any, ListChatsResponse>>(ListChatsService);
 
@@ -27,10 +28,10 @@ export class ChatController  {
         const chatOrError = await createChatService.execute({
             ...body,
         });
-        if (chatOrError instanceof ChatAlreadyExistsException) {
-            throw new ChatAlreadyExistsException();
+        if (chatOrError.isLeft()) {
+           return response.status(400).json(left(chatOrError.value))
         };
-
-        return response.status(201).json(instanceToInstance(chatOrError));
+   
+        return response.status(201).json(right(instanceToInstance(chatOrError.value)));
     };
 }

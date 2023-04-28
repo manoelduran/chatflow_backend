@@ -18,6 +18,7 @@ class CreateChatService {
             return left(new ChatAlreadyExistsException());
         };
         const newChat = await this.chatsRepository.create(data);
+      
         return right(newChat);
     };
 };

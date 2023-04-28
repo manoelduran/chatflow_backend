@@ -5,11 +5,11 @@ import express, { Express as Application } from 'express';
 import { createServer, Server as HttpServer } from "http";
 import socketio from 'socket.io';
 import { router } from '@shared/infra/http/routes';
-import {listen} from '../../../../socket';
 import cors from 'cors';
 import '@shared/container';
 import { errors } from 'celebrate';
 import { httpExceptionHandler } from './middlewares/httpExceptionHandler';
+import { listen } from '../../../socket';
 
 class Main {
     public app: Application;

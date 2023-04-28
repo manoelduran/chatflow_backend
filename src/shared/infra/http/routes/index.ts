@@ -1,11 +1,9 @@
 import { Router } from "express";
+import { chatRoutes } from "./chats.routes";
 
 
 const router = Router();
 
-router.post('/send', (req , res) => {
-   const body = req.body
-    console.log('body', body)
-})
+router.use("/chats", chatRoutes);
 
 export { router }
