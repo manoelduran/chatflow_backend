@@ -11,6 +11,7 @@ CREATE TABLE "users" (
 -- CreateTable
 CREATE TABLE "chats" (
     "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "chats_pkey" PRIMARY KEY ("id")
@@ -38,6 +39,9 @@ CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "users_username_key" ON "users"("username");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "chats_name_key" ON "chats"("name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "_ChatUser_AB_unique" ON "_ChatUser"("A", "B");
