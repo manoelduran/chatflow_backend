@@ -13,12 +13,13 @@ class CreateChatService {
         private chatsRepository: IChatsRepository
     ) { }
     async execute(data: CreateChatDTO): CreateChatResponse {
+
         const chatAlreadyExists = await this.chatsRepository.findByName(data.name);
         if (chatAlreadyExists.isRight()) {
             return left(new ChatAlreadyExistsException());
         };
         const newChat = await this.chatsRepository.create(data);
-      
+
         return right(newChat);
     };
 };
