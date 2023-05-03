@@ -9,6 +9,8 @@ import { ChatAlreadyExistsException } from "@modules/Chat/exceptions/ChatAlready
 import { CreateChatService } from "@modules/Chat/services/CreateChat/CreateChatService";
 import { ListChatsService } from "@modules/Chat/services/ListChats/ListChatsService";
 import { left, right } from "@shared/either";
+import { UpdateChatResponse } from "@modules/Chat/responses/UpdateChatResponse";
+import { JoinChatService } from "@modules/Chat/services/JoinChat/JoinChatService";
 
 export class ChatController  {
 
@@ -22,11 +24,27 @@ export class ChatController  {
 
     public async create(request: Request, response: Response): Promise<Response> {
         const { body } = request;
-
+        const {params} = request;
         const createChatService = container.resolve<Service<any, CreateChatResponse>>(CreateChatService);
 
         const chatOrError = await createChatService.execute({
             ...body,
+            params
+        });
+        if (chatOrError.isLeft()) {
+           return response.status(400).json(left(chatOrError.value))
+        };
+   
+        return response.status(201).json(right(instanceToInstance(chatOrError.value)));
+    };
+    public async join(request: Request, response: Response): Promise<Response> {
+        const { body } = request;
+        const { chat_id } = request.params;
+        const joinChatService = container.resolve<Service<any, UpdateChatResponse>>(JoinChatService);
+
+        const chatOrError = await joinChatService.execute({
+            ...body,
+            chat_id
         });
         if (chatOrError.isLeft()) {
            return response.status(400).json(left(chatOrError.value))
