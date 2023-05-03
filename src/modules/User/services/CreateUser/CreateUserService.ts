@@ -13,11 +13,12 @@ class CreateUserService {
         private usersRepository: IUsersRepository
     ) { }
     async execute(data: CreateUserDTO): CreateUserResponse {
-
-        const userAlreadyExists = await this.usersRepository.findByData(data.username, data.email);
+    
+        const userAlreadyExists = await this.usersRepository.findByWhere(data.username, data.email);
         if (userAlreadyExists.isRight()) {
             return left(new UserAlreadyExistsException());
         };
+        console.log('data', data)
         const newUser = await this.usersRepository.create(data);
 
         return right(newUser);

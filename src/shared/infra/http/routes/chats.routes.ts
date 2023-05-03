@@ -7,12 +7,26 @@ const chatRoutes = Router();
 
 const chatController = new ChatController();
 
-chatRoutes.post("/", celebrate({
+chatRoutes.post("/:user_id", celebrate({
+  [Segments.PARAMS]: {
+    user_id: Joi.string().uuid().required(),
+  },
     [Segments.BODY]: {
       name: Joi.string().required(),
     },
   }),
   chatController.create
+  );
+
+  chatRoutes.post("/join/:chat_id", celebrate({
+    [Segments.PARAMS]: {
+      chat_id: Joi.string().uuid().required(),
+    },
+    [Segments.BODY]: {
+      user_id: Joi.string().uuid().required(),
+    },
+  }),
+  chatController.join
   );
 
 chatRoutes.get("/", chatController.list)

@@ -1,12 +1,11 @@
-
-
 import { prisma } from "@shared/infra/orm/prisma";
 import { Either, left, right } from "@shared/either";
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 import { CreateUserDTO } from "@modules/User/dtos/CreateUserDTO";
 import { UserModel } from "@modules/User/infra/persistence/models/User";
 import { UserNotFoundException } from "@modules/User/exceptions/UserNotFoundException";
 import { IUsersRepository } from "@modules/User/repositories/IUsersRepository";
+import { JoinChatDTO } from "@modules/Chat/dtos/JoinChatDTO";
 
 
 class UsersRepository implements IUsersRepository {
@@ -15,35 +14,36 @@ class UsersRepository implements IUsersRepository {
         this.ormRepository = prisma
     }
     async create(data: CreateUserDTO): Promise<UserModel> {
-        const user = await this.ormRepository.user.create({data});
+        const user = await this.ormRepository.user.create({ data });
         return user;
-      }
-      async list(): Promise<UserModel[]> {
+    }
+    async list(): Promise<UserModel[]> {
         const users = await this.ormRepository.user.findMany();
         return users;
-      }
-      async findByData(username: string, email: string): Promise<Either<UserNotFoundException, UserModel>> {
-        const userOrError = await this.ormRepository.user.findUnique({
+    }
+    async findByWhere(username: string, email: string): Promise<Either<UserNotFoundException, UserModel | null>> {
+        const user = await prisma.user.findFirst({
             where: {
-                email, username
+                OR: [{ email }, { username }],
             },
         });
-        if(!userOrError) {
+        if (!user) {
             return left(new UserNotFoundException())
         }
-        return right(userOrError);
+        return right(user)
+
     }
-      async findById(id: string): Promise<Either<UserNotFoundException, UserModel>> {
-        const userOrError = await this.ormRepository.user.findUnique({
+    async findById(id: string): Promise<Either<UserNotFoundException, UserModel>> {
+        const userOrError = await this.ormRepository.user.findFirst({
             where: {
                 id,
             },
         });
-        if(!userOrError) {
+        if (!userOrError) {
             return left(new UserNotFoundException())
         }
         return right(userOrError);
-      }
+    }
 };
 
 export { UsersRepository };
