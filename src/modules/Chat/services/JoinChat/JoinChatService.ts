@@ -1,34 +1,35 @@
 import { CreateChatDTO } from "@modules/Chat/dtos/CreateChatDTO";
+import { JoinChatDTO } from "@modules/Chat/dtos/JoinChatDTO";
 import { ChatAlreadyExistsException } from "@modules/Chat/exceptions/ChatAlreadyExistsException";
+import { ChatNotFoundException } from "@modules/Chat/exceptions/ChatNotFoundException";
 import { IChatsRepository } from "@modules/Chat/repositories/IChatsRepository";
 import { CreateChatResponse } from "@modules/Chat/responses/CreateChatResponse";
-import { UserNotFoundException } from "@modules/User/exceptions/UserNotFoundException";
+import { UpdateChatResponse } from "@modules/Chat/responses/UpdateChatResponse";
 import { IUsersRepository } from "@modules/User/repositories/IUsersRepository";
 import { left, right } from "@shared/either";
 import { inject, injectable } from "tsyringe";
 
 
 @injectable()
-class CreateChatService {
+class JoinChatService {
     constructor(
         @inject("ChatsRepository")
         private chatsRepository: IChatsRepository,
         @inject("UsersRepository")
         private usersRepository: IUsersRepository
     ) { }
-    async execute(data: CreateChatDTO): CreateChatResponse {
+    async execute(data: JoinChatDTO): UpdateChatResponse {
         const userOrError = await this.usersRepository.findById(data.user_id);
         if (userOrError.isLeft()) {
-            return left(new UserNotFoundException());
+            return left(userOrError.value);
         };
-        const chatAlreadyExists = await this.chatsRepository.findByName(data.name);
-        if (chatAlreadyExists.isRight()) {
-            return left(new ChatAlreadyExistsException());
+        const chatOrError = await this.chatsRepository.findById(data.chat_id);
+        if (chatOrError.isLeft()) {
+            return left(chatOrError.value);
         };
-        const newChat = await this.chatsRepository.create({name: data.name, user: userOrError.value});
-
-        return right(newChat);
+        const updatedChat = await this.chatsRepository.update(data);
+        return right(updatedChat);
     };
 };
 
-export { CreateChatService };
+export { JoinChatService };
