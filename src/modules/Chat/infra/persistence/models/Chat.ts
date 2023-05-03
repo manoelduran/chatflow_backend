@@ -8,8 +8,7 @@ class ChatModel implements Chat {
     constructor(props: Chat) {
         if (!this.id) {
             this.id = uuidV4();
-            this.name = props.name
-            this.created_at = props.created_at
+            Object.assign(this, props)
         }
     }
 };
