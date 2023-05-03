@@ -5,6 +5,7 @@ import { CreateChatDTO } from "@modules/Chat/dtos/CreateChatDTO";
 import { Either, left, right } from "@shared/either";
 import { ChatNotFoundException } from "@modules/Chat/exceptions/ChatNotFoundException";
 import { PrismaClient } from "@prisma/client";
+import { JoinChatDTO } from "@modules/Chat/dtos/JoinChatDTO";
 
 
 class ChatsRepository implements IChatsRepository {
@@ -12,36 +13,64 @@ class ChatsRepository implements IChatsRepository {
     constructor() {
         this.ormRepository = prisma
     }
+    async update(data: JoinChatDTO): Promise<ChatModel> {
+        const { chat_id, user_id } = data
+        const updatedChat = await prisma.chat.update({
+            where: { id: chat_id },
+            data: {
+                UsersOnChats: {
+                    create: [
+                        {
+                            userId: user_id
+                        }
+                    ]
+                },
+            },
+        })
+        return updatedChat
+    }
     async create(data: CreateChatDTO): Promise<ChatModel> {
-        const chat = await this.ormRepository.chat.create({data});
+        const { name, user } = data
+        const chat = await this.ormRepository.chat.create({
+            data: {
+                name: name,
+                UsersOnChats: {
+                   create: [
+                    {
+                        userId: user.id
+                    }
+                   ]
+                }
+            }
+        });
         return chat;
-      }
-      async list(): Promise<ChatModel[]> {
+    }
+    async list(): Promise<ChatModel[]> {
         const chats = await this.ormRepository.chat.findMany();
         return chats;
-      }
-      async findByName(name: string): Promise<Either<ChatNotFoundException, ChatModel>> {
+    }
+    async findByName(name: string): Promise<Either<ChatNotFoundException, ChatModel>> {
         const chatOrError = await this.ormRepository.chat.findUnique({
             where: {
                 name,
             },
         });
-        if(!chatOrError) {
+        if (!chatOrError) {
             return left(new ChatNotFoundException())
         }
         return right(chatOrError);
     }
-      async findById(id: string): Promise<Either<ChatNotFoundException, ChatModel>> {
+    async findById(id: string): Promise<Either<ChatNotFoundException, ChatModel>> {
         const chatOrError = await this.ormRepository.chat.findUnique({
             where: {
                 id,
             },
         });
-        if(!chatOrError) {
+        if (!chatOrError) {
             return left(new ChatNotFoundException())
         }
         return right(chatOrError);
-      }
+    }
 };
 
 export { ChatsRepository };
