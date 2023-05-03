@@ -1,13 +1,13 @@
 import { Either } from '@shared/either';
-import { ChatAlreadyExistsException } from '@modules/Chat/exceptions/ChatAlreadyExistsException';
 import { ChatModel } from '../infra/persistence/models/Chat';
+import { ChatNotFoundException } from '../exceptions/ChatNotFoundException';
 import { UserNotFoundException } from '@modules/User/exceptions/UserNotFoundException';
 
 
 
-export type CreateChatResponse = Promise<
+export type UpdateChatResponse = Promise<
   Either<
-  ChatAlreadyExistsException | UserNotFoundException,
-    ChatModel
+  ChatNotFoundException | UserNotFoundException,
+  ChatModel
   >
 >;
