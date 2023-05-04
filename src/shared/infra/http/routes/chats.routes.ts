@@ -1,13 +1,14 @@
 import { ChatController } from "@modules/Chat/infra/http/controllers/ChatController";
 import { celebrate, Joi, Segments } from "celebrate";
 import { Router } from "express";
+import { ensureAuthenticated } from "@shared/infra/http/middlewares/ensureAuthenticated";
 
 
 const chatRoutes = Router();
 
 const chatController = new ChatController();
 
-chatRoutes.post("/:user_id", celebrate({
+chatRoutes.post("/:user_id", (req, res, next) => ensureAuthenticated(req, res, next), celebrate({
   [Segments.PARAMS]: {
     user_id: Joi.string().uuid().required(),
   },
@@ -18,7 +19,7 @@ chatRoutes.post("/:user_id", celebrate({
   chatController.create
   );
 
-  chatRoutes.post("/join/:chat_id", celebrate({
+  chatRoutes.post("/join/:chat_id",(req, res, next) => ensureAuthenticated(req, res, next), celebrate({
     [Segments.PARAMS]: {
       chat_id: Joi.string().uuid().required(),
     },
