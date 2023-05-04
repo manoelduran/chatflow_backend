@@ -21,7 +21,7 @@ class UsersRepository implements IUsersRepository {
         const users = await this.ormRepository.user.findMany();
         return users;
     }
-    async findByWhere(username: string, email: string): Promise<Either<UserNotFoundException, UserModel | null>> {
+    async findByWhere(username?: string, email?: string): Promise<Either<UserNotFoundException, UserModel | null>> {
         const user = await prisma.user.findFirst({
             where: {
                 OR: [{ email }, { username }],
@@ -32,6 +32,17 @@ class UsersRepository implements IUsersRepository {
         }
         return right(user)
 
+    }
+    async findByEmail(email: string): Promise<Either<UserNotFoundException, UserModel>> {
+        const userOrError = await this.ormRepository.user.findUnique({
+            where: {
+                email,
+            },
+        });
+        if (!userOrError) {
+            return left(new UserNotFoundException())
+        }
+        return right(userOrError);
     }
     async findById(id: string): Promise<Either<UserNotFoundException, UserModel>> {
         const userOrError = await this.ormRepository.user.findFirst({

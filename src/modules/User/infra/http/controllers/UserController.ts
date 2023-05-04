@@ -25,12 +25,12 @@ export class UserController  {
 
         const createUserservice = container.resolve<Service<any, CreateUserResponse>>(CreateUserService);
 
-        const chatOrError = await createUserservice.execute({
+        const userOrError = await createUserservice.execute({
             ...body,
         });
-        if (chatOrError.isLeft()) {
-           return response.status(400).json(left(chatOrError.value))
+        if (userOrError.isLeft()) {
+           return response.status(400).json(left(userOrError.value))
         };
-        return response.status(201).json(right(instanceToInstance(chatOrError.value)));
+        return response.status(201).json(right(instanceToInstance(userOrError.value)));
     };
 }
