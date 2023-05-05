@@ -11,6 +11,8 @@ import { ListChatsService } from "@modules/Chat/services/ListChats/ListChatsServ
 import { left, right } from "@shared/either";
 import { UpdateChatResponse } from "@modules/Chat/responses/UpdateChatResponse";
 import { JoinChatService } from "@modules/Chat/services/JoinChat/JoinChatService";
+import { JoinChatDTO } from "@modules/Chat/dtos/JoinChatDTO";
+import { CreateChatDTO } from "@modules/Chat/dtos/CreateChatDTO";
 
 export class ChatController  {
 
@@ -24,12 +26,13 @@ export class ChatController  {
 
     public async create(request: Request, response: Response): Promise<Response> {
         const { body } = request;
-        const {params} = request;
-        const createChatService = container.resolve<Service<any, CreateChatResponse>>(CreateChatService);
+        const {user} = request;
+        console.log('user', user)
+        const createChatService = container.resolve<Service<CreateChatDTO, CreateChatResponse>>(CreateChatService);
 
         const chatOrError = await createChatService.execute({
-            ...body,
-            params
+           ...body,
+           user_id: user.owner_id
         });
         if (chatOrError.isLeft()) {
            return response.status(400).json(left(chatOrError.value))
@@ -38,13 +41,14 @@ export class ChatController  {
         return response.status(201).json(right(instanceToInstance(chatOrError.value)));
     };
     public async join(request: Request, response: Response): Promise<Response> {
-        const { body } = request;
+        const { user } = request;
+        console.log('user', user)
         const { chat_id } = request.params;
-        const joinChatService = container.resolve<Service<any, UpdateChatResponse>>(JoinChatService);
+        const joinChatService = container.resolve<Service<JoinChatDTO, UpdateChatResponse>>(JoinChatService);
 
         const chatOrError = await joinChatService.execute({
-            ...body,
-            chat_id
+  chat_id,
+  user_id: user.owner_id
         });
         if (chatOrError.isLeft()) {
            return response.status(400).json(left(chatOrError.value))
