@@ -10,10 +10,9 @@ const messageRoutes = Router();
 
 const messageController = new MessageController();
 
-messageRoutes.post("/", (req, res, next) => ensureAuthenticated(req, res, next), celebrate({
+messageRoutes.post("/:chat_id", (req, res, next) => ensureAuthenticated(req, res, next), celebrate({
     [Segments.BODY]: {
       text: Joi.string().required(),
-      chat_id: Joi.string().uuid(),
     },
   }),
   messageController.create

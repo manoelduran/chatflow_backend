@@ -7,6 +7,7 @@ class UserModel implements User {
     email:  string;
     username: string;
     password: string;
+    isPremium: boolean;
     created_at: Date;
     constructor(props: User) {
         if (!this.id) {

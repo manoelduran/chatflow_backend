@@ -22,13 +22,14 @@ export class MessageController {
 
     public async create(request: Request, response: Response): Promise<Response> {
         const { body } = request;
+        const {params} = request
         const { user } = request;
-console.log('user', user)
         const createMessageService = container.resolve<Service<CreateMessageDTO, CreateMessageResponse>>(CreateMessageService);
 
         const messageOrError = await createMessageService.execute({
             ...body,
-            user_id: user.id
+            chat_id: params.chat_id,
+            user_id: user.owner_id
         });
         if (messageOrError.isLeft()) {
             return response.status(400).json(left(messageOrError.value))

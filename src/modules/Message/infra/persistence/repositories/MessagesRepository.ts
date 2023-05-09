@@ -22,7 +22,6 @@ class MessagesRepository implements IMessagesRepository {
                 userId: data.user_id,
             }
         });
-        console.log('message', message)
         return message;
     }
     async list(): Promise<MessageModel[]> {
@@ -32,7 +31,7 @@ class MessagesRepository implements IMessagesRepository {
     async findSpecificMessage(chat_id: string, user_id: string, text: string): Promise<Either<MessageNotFoundException, MessageModel>> {
         const messageOrError = await this.ormRepository.message.findFirst({
             where: {
-                AND: [{ chatId: chat_id }, { userId: user_id }, {text: text}],
+                AND: [{ chatId: chat_id }, { userId: user_id }, { text: text }],
             },
         });
         if (!messageOrError) {
@@ -51,9 +50,9 @@ class MessagesRepository implements IMessagesRepository {
         }
         return right(messageOrError);
     }
-    async  findAllByUser(user_id: string): Promise<Either<MessageNotFoundException, MessageModel[]>> {
+    async findAllByUser(user_id: string): Promise<Either<MessageNotFoundException, MessageModel[]>> {
         const messageOrError = await this.ormRepository.message.findMany({
-            where: {userId: user_id},
+            where: { userId: user_id },
         });
         if (!messageOrError) {
             return left(new MessageNotFoundException())
