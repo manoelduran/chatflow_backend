@@ -31,7 +31,7 @@ class CreateMessageService {
         if (chatAlreadyExists.isLeft()) {
             return left(new ChatNotFoundException());
         };
-        const newChat = await this.messagesRepository.create(data);
+        const newChat = await this.messagesRepository.create({chat_id: data.chat_id, text: data.text, user_id: data.user_id});
 
         return right(newChat);
     };

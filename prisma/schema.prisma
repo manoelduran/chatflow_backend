@@ -16,6 +16,7 @@ model User {
   email        String         @unique
   username     String         @unique
   password     String
+  isPremium    Boolean        @default(false)
   messages     Message[]
   created_at   DateTime       @default(now())
   UsersOnChats UsersOnChats[]

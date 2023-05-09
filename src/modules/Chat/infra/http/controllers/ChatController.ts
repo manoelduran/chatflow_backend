@@ -27,7 +27,6 @@ export class ChatController  {
     public async create(request: Request, response: Response): Promise<Response> {
         const { body } = request;
         const {user} = request;
-        console.log('user', user)
         const createChatService = container.resolve<Service<CreateChatDTO, CreateChatResponse>>(CreateChatService);
 
         const chatOrError = await createChatService.execute({
@@ -42,7 +41,6 @@ export class ChatController  {
     };
     public async join(request: Request, response: Response): Promise<Response> {
         const { user } = request;
-        console.log('user', user)
         const { chat_id } = request.params;
         const joinChatService = container.resolve<Service<JoinChatDTO, UpdateChatResponse>>(JoinChatService);
 
