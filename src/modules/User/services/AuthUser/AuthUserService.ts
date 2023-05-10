@@ -18,14 +18,16 @@ class AuthUserService {
     ) {}
     async execute(data: AuthUserDTO): AuthUserResponse {
         const userOrError = await this.usersRepository.findByEmail(data.email)
-        console.log('userOrError', userOrError)
+   
         if(userOrError.isLeft()) {
             return left(userOrError.value)
         }
+
         const comparedPassword = await this.hashProvider.compareHash(data.password, userOrError.value.password);
         if(!comparedPassword) {
             return left(new PasswordNeedsToBeEqualException())
         }
+    
         const {id, username, email} = userOrError.value;
         const parsedToken = {
             owner_id: id,
