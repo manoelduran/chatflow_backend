@@ -9,7 +9,7 @@ import { container } from 'tsyringe';
 class AuthController {
     public async auth(request: Request, response: Response): Promise<Response> {
         const { body } = request;
-        console.log('body', body)
+    
         const authUserservice = container.resolve<Service<any, AuthUserResponse>>(AuthUserService);
 
         const userOrError = await authUserservice.execute({

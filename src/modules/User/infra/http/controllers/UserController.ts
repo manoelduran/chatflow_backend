@@ -9,6 +9,8 @@ import { ListUsersResponse } from '@modules/User/responses/ListUsersResponse';
 import { CreateUserResponse } from '@modules/User/responses/CreateUserResponse';
 import { CreateUserService } from '@modules/User/services/CreateUser/CreateUserService';
 import { ListUsersService } from '@modules/User/services/ListUsers/ListUsersService';
+import { GetUserService } from '@modules/User/services/GetUser/GetUserService';
+import { GetUserResponse } from '@modules/User/responses/GetUserResponse';
 
 export class UserController  {
 
@@ -33,4 +35,16 @@ export class UserController  {
         };
         return response.status(201).json(right(instanceToInstance(userOrError.value)));
     };
+
+    public async show(request: Request, response: Response): Promise<Response> {
+        const { params } = request;
+        const getUserService = container.resolve<Service<any, GetUserResponse>>(GetUserService);
+
+        const userOrError = await getUserService.execute();
+        if (userOrError.isLeft()) {
+            return response.status(400).json(left(userOrError.value))
+         };
+
+        return response.status(200).json(instanceToInstance(userOrError));
+    }
 }
