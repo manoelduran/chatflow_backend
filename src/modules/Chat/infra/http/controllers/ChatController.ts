@@ -27,7 +27,7 @@ export class ChatController {
         const { body } = request;
         const { user } = request;
         const createChatService = container.resolve<Service<CreateChatDTO, CreateChatResponse>>(CreateChatService);
-
+        
         const chatOrError = await createChatService.execute({
             ...body,
             user_id: user.owner_id

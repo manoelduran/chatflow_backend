@@ -34,6 +34,7 @@ class ChatsRepository implements IChatsRepository {
         const chat = await this.ormRepository.chat.create({
             data: {
                 name: name,
+                owner_id: user.id,
                 UsersOnChats: {
                    create: [
                     {

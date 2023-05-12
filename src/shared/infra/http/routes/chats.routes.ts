@@ -10,7 +10,7 @@ const chatController = new ChatController();
 
 chatRoutes.post("/", (req, res, next) => ensureAuthenticated(req, res, next), celebrate({
     [Segments.BODY]: {
-      name: Joi.string().required(),
+      name: Joi.string().required()
     },
   }),
   chatController.create
