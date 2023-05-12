@@ -2,6 +2,7 @@ import { AuthController } from "@modules/User/infra/http/controllers/AuthControl
 import { UserController } from "@modules/User/infra/http/controllers/UserController";
 import { celebrate, Joi, Segments } from "celebrate";
 import { Router } from "express";
+import { ensureAuthenticated } from "../middlewares/ensureAuthenticated";
 
 
 const userRoutes = Router();
@@ -27,7 +28,13 @@ userRoutes.post("/", celebrate({
   }),
   authController.auth
   );
-
+  userRoutes.post("/show/:user_id",(req, res, next) => ensureAuthenticated(req, res, next), celebrate({
+    [Segments.PARAMS]: {
+      user_id: Joi.string().uuid().required(),
+    },
+  }),
+  userController.show
+  );
 userRoutes.get("/", userController.list)
 
 export { userRoutes }
