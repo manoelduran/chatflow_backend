@@ -11,6 +11,8 @@ import { CreateUserService } from '@modules/User/services/CreateUser/CreateUserS
 import { ListUsersService } from '@modules/User/services/ListUsers/ListUsersService';
 import { GetUserService } from '@modules/User/services/GetUser/GetUserService';
 import { GetUserResponse } from '@modules/User/responses/GetUserResponse';
+import { GetUserDTO } from '@modules/User/dtos/GetUserDTO';
+import { CreateUserDTO } from '@modules/User/dtos/CreateUserDTO';
 
 export class UserController  {
 
@@ -25,7 +27,7 @@ export class UserController  {
     public async create(request: Request, response: Response): Promise<Response> {
         const { body } = request;
 
-        const createUserservice = container.resolve<Service<any, CreateUserResponse>>(CreateUserService);
+        const createUserservice = container.resolve<Service<CreateUserDTO, CreateUserResponse>>(CreateUserService);
 
         const userOrError = await createUserservice.execute({
             ...body,
@@ -38,9 +40,9 @@ export class UserController  {
 
     public async show(request: Request, response: Response): Promise<Response> {
         const { params } = request;
-        const getUserService = container.resolve<Service<any, GetUserResponse>>(GetUserService);
+        const getUserService = container.resolve<Service<GetUserDTO, GetUserResponse>>(GetUserService);
 
-        const userOrError = await getUserService.execute();
+        const userOrError = await getUserService.execute({user_id: params.owner_id});
         if (userOrError.isLeft()) {
             return response.status(400).json(left(userOrError.value))
          };

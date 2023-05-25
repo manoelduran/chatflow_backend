@@ -24,8 +24,7 @@ export class ChatController {
     };
 
     public async create(request: Request, response: Response): Promise<Response> {
-        const { body } = request;
-        const { user } = request;
+        const { body, user } = request;
         const createChatService = container.resolve<Service<CreateChatDTO, CreateChatResponse>>(CreateChatService);
         
         const chatOrError = await createChatService.execute({

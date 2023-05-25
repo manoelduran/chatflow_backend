@@ -1,3 +1,4 @@
+import { AuthUserDTO } from '@modules/User/dtos/AuthUserDTO';
 import { AuthUserResponse } from '@modules/User/responses/AuthUserResponse';
 import { AuthUserService } from '@modules/User/services/AuthUser/AuthUserService';
 import { Service } from '@shared/domain/Service';
@@ -10,7 +11,7 @@ class AuthController {
     public async auth(request: Request, response: Response): Promise<Response> {
         const { body } = request;
     
-        const authUserservice = container.resolve<Service<any, AuthUserResponse>>(AuthUserService);
+        const authUserservice = container.resolve<Service<AuthUserDTO, AuthUserResponse>>(AuthUserService);
 
         const userOrError = await authUserservice.execute({
             ...body,
