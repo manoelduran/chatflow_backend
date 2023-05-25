@@ -9,6 +9,7 @@ interface IMessagesRepository {
     findSpecificMessage(chat_id: string, user_id: string, text: string): Promise<Either<MessageNotFoundException, MessageModel>>;
     findAllUserMessagesInChat(chat_id: string, user_id: string): Promise<Either<MessageNotFoundException, MessageModel[]>>
     findAllByUser(user_id: string): Promise<Either<MessageNotFoundException, MessageModel[]>>;
+    findAllByChat(chat_id: string): Promise<Either<MessageNotFoundException, MessageModel[]>>
     list(): Promise<MessageModel[]> ;
 };
 
