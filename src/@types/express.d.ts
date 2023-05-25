@@ -6,7 +6,7 @@ declare namespace Express {
             username: string;
             email: string;
         };
-        io: any;
+        io: socketio.Server;
         connectedUsers: {
           [key: string]: string;
         };
