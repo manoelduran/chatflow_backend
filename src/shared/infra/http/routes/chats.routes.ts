@@ -25,5 +25,10 @@ chatRoutes.post("/", (req, res, next) => ensureAuthenticated(req, res, next), ce
   );
 
 chatRoutes.get("/", chatController.list)
+chatRoutes.get("/show/:chat_id",(req, res, next) => ensureAuthenticated(req, res, next), celebrate({
+  [Segments.PARAMS]: {
+    chat_id: Joi.string().uuid().required(),
+  },
+}), chatController.show)
 
 export { chatRoutes }

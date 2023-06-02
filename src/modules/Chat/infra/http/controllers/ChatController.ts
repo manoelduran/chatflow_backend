@@ -13,6 +13,8 @@ import { UpdateChatResponse } from "@modules/Chat/responses/UpdateChatResponse";
 import { JoinChatService } from "@modules/Chat/services/JoinChat/JoinChatService";
 import { JoinChatDTO } from "@modules/Chat/dtos/JoinChatDTO";
 import { CreateChatDTO } from "@modules/Chat/dtos/CreateChatDTO";
+import { GetChatDTO } from "@modules/Chat/dtos/GetChatDTO";
+import { GetChatResponse } from "@modules/Chat/responses/GetChatResponse";
 
 export class ChatController {
 
@@ -51,5 +53,16 @@ export class ChatController {
         };
 
         return response.status(201).json(right(instanceToInstance(chatOrError.value)));
+    };
+    public async show(request: Request, response: Response): Promise<Response> {
+        const { params } = request;
+        const getChatervice = container.resolve<Service<GetChatDTO, GetChatResponse>>(GetChatService);
+
+        const chatOrError = await getChatervice.execute({chat_id: params.chat_id});
+        if (chatOrError.isLeft()) {
+            return response.status(400).json(left(chatOrError.value))
+         };
+
+        return response.status(200).json(instanceToInstance(chatOrError));
     };
 }
