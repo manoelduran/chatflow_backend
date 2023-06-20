@@ -15,7 +15,7 @@ function ensureAuthenticated(req: Request, res: Response, next: NextFunction) {
     if (!authToken) {
         return res.status(401).json({ error: "Provide a valid token!" })
     }
-    const [, token] = authToken.split(" "); // remove the Bearer slot and just use the token slot
+    const [,token] = authToken.split(" "); // remove the Bearer slot and just use the token slot
     try {
         const decoded = verify(token, process.env.JWT_SECRET);
 
