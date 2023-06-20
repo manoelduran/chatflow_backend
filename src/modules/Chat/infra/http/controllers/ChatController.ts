@@ -5,7 +5,6 @@ import { Service } from "@shared/domain/Service";
 import { instanceToInstance } from "class-transformer";
 import { container } from "tsyringe";
 import { CreateChatResponse } from "@modules/Chat/responses/CreateChatResponse";
-import { ChatAlreadyExistsException } from "@modules/Chat/exceptions/ChatAlreadyExistsException";
 import { CreateChatService } from "@modules/Chat/services/CreateChat/CreateChatService";
 import { ListChatsService } from "@modules/Chat/services/ListChats/ListChatsService";
 import { left, right } from "@shared/either";
@@ -15,6 +14,7 @@ import { JoinChatDTO } from "@modules/Chat/dtos/JoinChatDTO";
 import { CreateChatDTO } from "@modules/Chat/dtos/CreateChatDTO";
 import { GetChatDTO } from "@modules/Chat/dtos/GetChatDTO";
 import { GetChatResponse } from "@modules/Chat/responses/GetChatResponse";
+import { GetChatService } from "@modules/Chat/services/GetChat/GetChatService";
 
 export class ChatController {
 
@@ -63,6 +63,6 @@ export class ChatController {
             return response.status(400).json(left(chatOrError.value))
          };
 
-        return response.status(200).json(instanceToInstance(chatOrError));
+        return response.status(200).json(instanceToInstance(chatOrError.value));
     };
 }
