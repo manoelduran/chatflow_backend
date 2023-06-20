@@ -8,6 +8,9 @@ import { CreateMessageService } from '@modules/Message/services/CreateMessage/Cr
 import { ListMessagesService } from '@modules/Message/services/ListMessages/ListMessagesService';
 import { ListMessagesResponse } from '@modules/Message/responses/ListMessagesResponse';
 import { CreateMessageDTO } from '@modules/Message/dtos/CreateMessageDTO';
+import { ListMessagesByChatDTO } from '@modules/Message/dtos/ListMessagesByChatDTO';
+import { ListMessagesByChatService } from '@modules/Message/services/ListMessagesByChat/ListMessagesByChatService';
+import { ListMessagesByChatResponse } from '@modules/Message/responses/ListMessagesByChatResponse';
 
 
 export class MessageController {
@@ -19,13 +22,21 @@ export class MessageController {
 
         return response.status(200).json(instanceToInstance(messages));
     };
+    public async listByChat(request: Request, response: Response): Promise<Response> {
+        const {chat_id} = request.params;
+        const listMessagesByChatService = container.resolve<Service<ListMessagesByChatDTO, ListMessagesByChatResponse>>(ListMessagesByChatService);
 
+        const messages = await listMessagesByChatService.execute({chat_id: chat_id});
+        if(messages.isLeft()) {
+            return response.status(400).json(left(messages.value))
+        }
+        console.log('messsages controller', messages)
+        return response.status(200).json(right(instanceToInstance(messages.value)));
+    }
     public async create(request: Request, response: Response): Promise<Response> {
-        const { body } = request;
-        const {params} = request
-        const { user } = request;
-        const createMessageService = container.resolve<Service<CreateMessageDTO, CreateMessageResponse>>(CreateMessageService);
+        const { body, params, user } = request;
 
+        const createMessageService = container.resolve<Service<CreateMessageDTO, CreateMessageResponse>>(CreateMessageService);
         const messageOrError = await createMessageService.execute({
             ...body,
             chat_id: params.chat_id,

@@ -18,6 +18,14 @@ messageRoutes.post("/:chat_id", (req, res, next) => ensureAuthenticated(req, res
   messageController.create
   );
 
+  messageRoutes.get("/:chat_id", celebrate({
+    [Segments.PARAMS]: {
+      chat_id: Joi.string().uuid().required(),
+    },
+  }),
+  messageController.listByChat
+  );
+
 messageRoutes.get("/",(req, res, next) => ensureAuthenticated(req, res, next), messageController.list)
 
 export { messageRoutes }

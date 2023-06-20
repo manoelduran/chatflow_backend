@@ -28,7 +28,7 @@ userRoutes.post("/", celebrate({
   }),
   authController.auth
   );
-  userRoutes.post("/show/:user_id",(req, res, next) => ensureAuthenticated(req, res, next), celebrate({
+  userRoutes.get("/show/:user_id", celebrate({
     [Segments.PARAMS]: {
       user_id: Joi.string().uuid().required(),
     },

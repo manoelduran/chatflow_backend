@@ -59,6 +59,15 @@ class MessagesRepository implements IMessagesRepository {
         }
         return right(messageOrError);
     }
+    async findAllByChat(chat_id: string): Promise<Either<MessageNotFoundException, MessageModel[]>> {
+        const messageOrError = await this.ormRepository.message.findMany({
+            where: { chatId: chat_id },
+        });
+        if (!messageOrError) {
+            return left(new MessageNotFoundException())
+        }
+        return right(messageOrError);
+    }
     async findById(id: string): Promise<Either<MessageNotFoundException, MessageModel>> {
         const messageOrError = await this.ormRepository.message.findUnique({
             where: {

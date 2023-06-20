@@ -5,7 +5,6 @@ import { Service } from "@shared/domain/Service";
 import { instanceToInstance } from "class-transformer";
 import { container } from "tsyringe";
 import { CreateChatResponse } from "@modules/Chat/responses/CreateChatResponse";
-import { ChatAlreadyExistsException } from "@modules/Chat/exceptions/ChatAlreadyExistsException";
 import { CreateChatService } from "@modules/Chat/services/CreateChat/CreateChatService";
 import { ListChatsService } from "@modules/Chat/services/ListChats/ListChatsService";
 import { left, right } from "@shared/either";
@@ -13,6 +12,9 @@ import { UpdateChatResponse } from "@modules/Chat/responses/UpdateChatResponse";
 import { JoinChatService } from "@modules/Chat/services/JoinChat/JoinChatService";
 import { JoinChatDTO } from "@modules/Chat/dtos/JoinChatDTO";
 import { CreateChatDTO } from "@modules/Chat/dtos/CreateChatDTO";
+import { GetChatDTO } from "@modules/Chat/dtos/GetChatDTO";
+import { GetChatResponse } from "@modules/Chat/responses/GetChatResponse";
+import { GetChatService } from "@modules/Chat/services/GetChat/GetChatService";
 
 export class ChatController {
 
@@ -24,8 +26,7 @@ export class ChatController {
     };
 
     public async create(request: Request, response: Response): Promise<Response> {
-        const { body } = request;
-        const { user } = request;
+        const { body, user } = request;
         const createChatService = container.resolve<Service<CreateChatDTO, CreateChatResponse>>(CreateChatService);
         
         const chatOrError = await createChatService.execute({
@@ -52,5 +53,16 @@ export class ChatController {
         };
 
         return response.status(201).json(right(instanceToInstance(chatOrError.value)));
+    };
+    public async show(request: Request, response: Response): Promise<Response> {
+        const { params } = request;
+        const getChatervice = container.resolve<Service<GetChatDTO, GetChatResponse>>(GetChatService);
+
+        const chatOrError = await getChatervice.execute({chat_id: params.chat_id});
+        if (chatOrError.isLeft()) {
+            return response.status(400).json(left(chatOrError.value))
+         };
+
+        return response.status(200).json(instanceToInstance(chatOrError.value));
     };
 }
