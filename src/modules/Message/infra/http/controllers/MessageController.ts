@@ -27,8 +27,11 @@ export class MessageController {
         const listMessagesByChatService = container.resolve<Service<ListMessagesByChatDTO, ListMessagesByChatResponse>>(ListMessagesByChatService);
 
         const messages = await listMessagesByChatService.execute({chat_id: chat_id});
+        if(messages.isLeft()) {
+            return response.status(400).json(left(messages.value))
+        }
         console.log('messsages controller', messages)
-        return response.status(200).json(instanceToInstance(messages));
+        return response.status(200).json(right(instanceToInstance(messages.value)));
     }
     public async create(request: Request, response: Response): Promise<Response> {
         const { body, params, user } = request;
