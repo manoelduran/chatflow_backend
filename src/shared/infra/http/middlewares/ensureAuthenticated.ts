@@ -1,5 +1,8 @@
 import { verify } from 'jsonwebtoken';
 import { NextFunction, Request, Response } from 'express';
+import { AppError } from '@shared/errors/AppError';
+import { container } from 'tsyringe';
+import { IUsersRepository } from '@modules/User/repositories/IUsersRepository';
 
 interface ITokenPayload {
     iat: number;
@@ -10,25 +13,35 @@ interface ITokenPayload {
     email: string;
 }
 
-function ensureAuthenticated(req: Request, res: Response, next: NextFunction) {
-    const authToken = req.headers.authorization;
-    if (!authToken) {
-        return res.status(401).json({ error: "Provide a valid token!" })
-    }
-    const [,token] = authToken.split(" "); // remove the Bearer slot and just use the token slot
-    try {
-        const decoded = verify(token, process.env.JWT_SECRET);
+ function ensureAuthenticated(req: Request, res: Response, next: NextFunction): void {
 
-        const { sub, email, owner_id, username} = decoded as ITokenPayload;
+    const authToken = req.headers.authorization;
+    console.log('authToken', authToken)
+    if (!authToken) {
+        return next(new AppError('JWT token is missing', 404))
+    }
+    const [, token] = authToken.split(' '); // remove the Bearer slot and just use the token slot
+
+    try {
+        console.log('token', token)
+        const decoded = verify(token, process.env.JWT_SECRET || 'default');
+        req.originalUrl;
+        console.log('decoded', decoded)
+
+        const { sub, email, owner_id, username } = decoded as ITokenPayload;
+
+        console.log('decoded', sub, email, owner_id, username)
         req.user = {
-            id: sub,
+            id: owner_id,
             owner_id,
             username,
-            email,
-          };
-          return next();
-    } catch(error) {
+            email
+        };
+        return next();
+    } catch (error) {
         console.log(error)
+  
+        throw new AppError('Invalid JWT token', 401);
     }
 
 }

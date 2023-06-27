@@ -2,7 +2,6 @@ import { AuthController } from "@modules/User/infra/http/controllers/AuthControl
 import { UserController } from "@modules/User/infra/http/controllers/UserController";
 import { celebrate, Joi, Segments } from "celebrate";
 import { Router } from "express";
-import { ensureAuthenticated } from "../middlewares/ensureAuthenticated";
 
 
 const userRoutes = Router();
