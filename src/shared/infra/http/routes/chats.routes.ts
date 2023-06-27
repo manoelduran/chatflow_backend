@@ -8,7 +8,7 @@ const chatRoutes = Router();
 
 const chatController = new ChatController();
 
-chatRoutes.post("/", (req, res, next) => ensureAuthenticated(req, res, next), celebrate({
+chatRoutes.post("/",(req, res, next) => ensureAuthenticated(req, res, next),  celebrate({
     [Segments.BODY]: {
       name: Joi.string().required()
     },
