@@ -23,7 +23,6 @@ class ListMessagesByChatService {
         if(messages.isLeft()) {
             return left(messages.value)
         }
-        console.log('messages', messages.value)
         return right(messages.value);
     };
 };

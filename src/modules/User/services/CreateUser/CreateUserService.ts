@@ -20,7 +20,6 @@ class CreateUserService {
         if (userAlreadyExists.isRight()) {
             return left(new UserAlreadyExistsException());
         };
-        console.log('data', data)
         const hashedPassword = await this.hashProvider.generateHash(data.password);
         const newUser = await this.usersRepository.create({ ...data, password: hashedPassword });
 
