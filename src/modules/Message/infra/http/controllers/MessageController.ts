@@ -30,7 +30,7 @@ export class MessageController {
         if(messages.isLeft()) {
             return response.status(400).json(left(messages.value))
         }
-        console.log('messsages controller', messages)
+       
         return response.status(200).json(right(instanceToInstance(messages.value)));
     }
     public async create(request: Request, response: Response): Promise<Response> {
