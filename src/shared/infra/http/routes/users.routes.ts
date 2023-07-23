@@ -34,6 +34,7 @@ userRoutes.post("/", celebrate({
   }),
   userController.show
   );
+
 userRoutes.get("/", userController.list)
 
 export { userRoutes }

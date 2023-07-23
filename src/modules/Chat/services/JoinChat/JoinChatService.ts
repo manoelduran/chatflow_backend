@@ -1,9 +1,5 @@
-import { CreateChatDTO } from "@modules/Chat/dtos/CreateChatDTO";
 import { JoinChatDTO } from "@modules/Chat/dtos/JoinChatDTO";
-import { ChatAlreadyExistsException } from "@modules/Chat/exceptions/ChatAlreadyExistsException";
-import { ChatNotFoundException } from "@modules/Chat/exceptions/ChatNotFoundException";
 import { IChatsRepository } from "@modules/Chat/repositories/IChatsRepository";
-import { CreateChatResponse } from "@modules/Chat/responses/CreateChatResponse";
 import { UpdateChatResponse } from "@modules/Chat/responses/UpdateChatResponse";
 import { IUsersRepository } from "@modules/User/repositories/IUsersRepository";
 import { left, right } from "@shared/either";
@@ -28,6 +24,9 @@ class JoinChatService {
             return left(chatOrError.value);
         };
         const updatedChat = await this.chatsRepository.update(data);
+        if(updatedChat as string) {
+            return  right(updatedChat)
+        }
         return right(updatedChat);
     };
 };

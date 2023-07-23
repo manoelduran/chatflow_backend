@@ -13,8 +13,29 @@ class ChatsRepository implements IChatsRepository {
     constructor() {
         this.ormRepository = prisma
     }
-    async update(data: JoinChatDTO): Promise<ChatModel> {
+
+    async getUsersByChatId(chat_id: string): Promise<number> {
+        const users = await prisma.usersOnChats.findMany({
+            where: {
+                chatId: chat_id
+            }
+        })
+        if (!users) {
+            return 0
+        }
+        return users.length
+    }
+    async update(data: JoinChatDTO): Promise<ChatModel | string> {
         const { chat_id, user_id } = data
+        const foundUser = await prisma.usersOnChats.findFirst({
+            where: {
+                chatId: chat_id,
+                userId: user_id
+            }
+        })
+        if (foundUser) {
+            return 'This user already associated with this chat room'
+        }
         const updatedChat = await prisma.chat.update({
             where: { id: chat_id },
             data: {
@@ -36,11 +57,11 @@ class ChatsRepository implements IChatsRepository {
                 name: name,
                 owner_id: user.id,
                 UsersOnChats: {
-                   create: [
-                    {
-                        userId: user.id
-                    }
-                   ]
+                    create: [
+                        {
+                            userId: user.id
+                        }
+                    ]
                 }
             }
         });

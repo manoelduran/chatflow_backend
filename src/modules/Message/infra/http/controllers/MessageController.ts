@@ -30,8 +30,8 @@ export class MessageController {
         if(messages.isLeft()) {
             return response.status(400).json(left(messages.value))
         }
-       
-        return response.status(200).json(right(instanceToInstance(messages.value)));
+       console.log('MESSAGES BY CHAT', messages)
+        return response.status(200).json(right(messages.value));
     }
     public async create(request: Request, response: Response): Promise<Response> {
         const { body, params, user } = request;

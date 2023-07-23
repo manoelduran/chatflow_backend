@@ -38,6 +38,7 @@ export class UserController  {
         return response.status(201).json(right(instanceToInstance(userOrError.value)));
     };
 
+    
     public async show(request: Request, response: Response): Promise<Response> {
         const { params } = request;
         const getUserService = container.resolve<Service<GetUserDTO, GetUserResponse>>(GetUserService);

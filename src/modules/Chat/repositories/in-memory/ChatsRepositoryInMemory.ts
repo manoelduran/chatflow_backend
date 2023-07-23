@@ -4,6 +4,7 @@ import { IChatsRepository } from '../IChatsRepository';
 import { ChatModel } from '@modules/Chat/infra/persistence/models/Chat';
 import { ChatNotFoundException } from '@modules/Chat/exceptions/ChatNotFoundException';
 import { CreateChatDTO } from '@modules/Chat/dtos/CreateChatDTO';
+import { JoinChatDTO } from '@modules/Chat/dtos/JoinChatDTO';
 
 
 
@@ -12,6 +13,13 @@ class ChatsRepositoryInMemory implements IChatsRepository {
     private chats: ChatModel[];
     constructor() {
         this.chats = [];
+    }
+    update(data: JoinChatDTO): Promise<string | ChatModel> {
+        throw new Error('Method not implemented.');
+    }
+
+    getUsersByChatId(chat_id: string): Promise<number> {
+        throw new Error('Method not implemented.');
     }
     async findByName(name: string): Promise<Either<ChatNotFoundException, ChatModel>> {
         const chat = this.chats.find(chat => chat.name === name);
