@@ -1,4 +1,3 @@
-
 import { ListChatsResponse } from "@modules/Chat/responses/ListChatsResponse";
 import { Request, Response } from 'express';
 import { Service } from "@shared/domain/Service";
@@ -15,20 +14,25 @@ import { CreateChatDTO } from "@modules/Chat/dtos/CreateChatDTO";
 import { GetChatDTO } from "@modules/Chat/dtos/GetChatDTO";
 import { GetChatResponse } from "@modules/Chat/responses/GetChatResponse";
 import { GetChatService } from "@modules/Chat/services/GetChat/GetChatService";
+import { GetUsersByChatDTO } from "@modules/Chat/dtos/GetUsersByChatDTO";
+import { GetUsersByChatResponse } from "@modules/Chat/responses/GetUsersByChatResponse";
+import { GetUsersByChatService } from "@modules/Chat/services/GetUsersByChat/GetUsersByChatService";
 
 export class ChatController {
 
     public async list(request: Request, response: Response): Promise<Response> {
         const listChatsService = container.resolve<Service<any, ListChatsResponse>>(ListChatsService);
-
         const chats = await listChatsService.execute();
-        return response.status(200).json(instanceToInstance(chats));
+        if(chats.isLeft()) {
+            return response.status(404).json(chats.value)
+        }
+        console.log('chats', chats.value)
+        return response.status(200).json(right(chats.value));
     };
 
     public async create(request: Request, response: Response): Promise<Response> {
         const { body, user } = request;
         const createChatService = container.resolve<Service<CreateChatDTO, CreateChatResponse>>(CreateChatService);
-        
         const chatOrError = await createChatService.execute({
             ...body,
             user_id: user.owner_id
@@ -39,6 +43,15 @@ export class ChatController {
         };
         return response.status(201).json(right(instanceToInstance(chatOrError.value)));
     };
+    public async totalUsersByChat(request: Request, response: Response): Promise<Response> {
+        const { params } = request;
+        const getUsersByChatService = container.resolve<Service<GetUsersByChatDTO, GetUsersByChatResponse>>(GetUsersByChatService);
+
+        const usersOrError = await getUsersByChatService.execute({chat_id: params.chat_id});
+
+         console.log('usersOreRROR CONTROLLER', usersOrError)
+        return response.status(200).json(instanceToInstance(usersOrError));
+    }
     public async join(request: Request, response: Response): Promise<Response> {
         const { user } = request;
         const { chat_id } = request.params;
@@ -51,7 +64,7 @@ export class ChatController {
         if (chatOrError.isLeft()) {
             return response.status(400).json(left(chatOrError.value))
         };
-
+        console.log('chatOrError.value', chatOrError.value)
         return response.status(201).json(right(instanceToInstance(chatOrError.value)));
     };
     public async show(request: Request, response: Response): Promise<Response> {
