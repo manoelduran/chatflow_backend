@@ -5,7 +5,6 @@ import { CreateUserDTO } from "@modules/User/dtos/CreateUserDTO";
 import { UserModel } from "@modules/User/infra/persistence/models/User";
 import { UserNotFoundException } from "@modules/User/exceptions/UserNotFoundException";
 import { IUsersRepository } from "@modules/User/repositories/IUsersRepository";
-import { JoinChatDTO } from "@modules/Chat/dtos/JoinChatDTO";
 
 
 class UsersRepository implements IUsersRepository {
@@ -13,6 +12,7 @@ class UsersRepository implements IUsersRepository {
     constructor() {
         this.ormRepository = prisma
     }
+
     async create(data: CreateUserDTO): Promise<UserModel> {
         const user = await this.ormRepository.user.create({ data });
         return user;

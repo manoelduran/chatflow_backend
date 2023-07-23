@@ -21,6 +21,7 @@ interface ITokenPayload {
 
     try {
         const decoded = verify(token, process.env.JWT_SECRET || 'default');
+        console.log('decoded', decoded)
         req.originalUrl;
 
         const { sub, email, owner_id, username } = decoded as ITokenPayload;

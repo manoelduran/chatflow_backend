@@ -8,6 +8,6 @@ import { UserNotFoundException } from '@modules/User/exceptions/UserNotFoundExce
 export type UpdateChatResponse = Promise<
   Either<
   ChatNotFoundException | UserNotFoundException,
-  ChatModel
+  ChatModel | string
   >
 >;
