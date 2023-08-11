@@ -34,7 +34,6 @@ class ListChatsService {
                 }
                 parsedChatsWithTotalUsers.push(parsedChat)
             }
-
         return right(parsedChatsWithTotalUsers);
         }
     };
