@@ -19,7 +19,7 @@ class AuthController {
         if (userOrError.isLeft()) {
            return response.status(400).json(left(userOrError.value))
         };
-        return response.status(201).json(right(instanceToInstance(userOrError.value)));
+        return response.status(201).json(right(userOrError.value));
     };
 }
 

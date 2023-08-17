@@ -48,6 +48,6 @@ export class UserController  {
             return response.status(400).json(left(userOrError.value))
          };
 
-        return response.status(200).json(instanceToInstance(userOrError));
+        return response.status(200).json(instanceToInstance(userOrError.value));
     }
 }

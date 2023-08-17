@@ -24,9 +24,10 @@ export class ChatController {
         const listChatsService = container.resolve<Service<any, ListChatsResponse>>(ListChatsService);
         const chats = await listChatsService.execute();
         if(chats.isLeft()) {
-            return response.status(404).json(chats.value)
+            console.log('chats', chats.value)
+            return response.status(400).json(left(chats.value))
         }
-        console.log('chats', chats.value)
+      
         return response.status(200).json(right(chats.value));
     };
 

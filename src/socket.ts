@@ -16,11 +16,11 @@ export const listen = (io: socketio.Server) => {
             socket.broadcast.emit("joined",` ${arg} joined to our chat!`)
         })
         socket.on("authenticate", (arg) => {
-            console.log("arg", arg)
+            console.log("arg auth", arg)
             socket.broadcast.emit("authenticated",` ${arg} has been authenticated!`)
         })
         socket.on("message", (arg) => {
-            console.log("arg", arg)
+            console.log("arg msg", arg)
             socket.broadcast.emit("sent",` ${arg.text} has been sent!`)
         })
     });
