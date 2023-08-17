@@ -11,7 +11,7 @@ class HttpExceptionHandler {
     }
 
     console.error(exception);
-
+console.log('excpetion', exception)
     return response.status(500).json({
       status: 'error',
       message: 'Falha interna no servidor.',

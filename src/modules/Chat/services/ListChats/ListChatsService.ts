@@ -19,8 +19,7 @@ class ListChatsService {
         let parsedChatsWithTotalUsers = [] as ChatWithTotalUsers[];
 
         const chats = await this.chatsRepository.list();
-    
-        if(chats.length > 0) {
+        if(chats?.length > 0) {
             for(const chat of chats) {
                 const usesrOrError = await this.chatsRepository.getUsersByChatId(chat.id);
                 const ownerName = await this.usersRepository.findById(chat.owner_id)
