@@ -18,8 +18,8 @@ class Main {
     private connectedUsers: ConnectedUsers = {};
     private allowedOrigins: string[] = [
         'http://localhost:3000',
-        'https://chatflow-ten.vercel.app',
-        'https://chatflow-manoelduran.vercel.app/',
+        'https://www.chatflows.com.br/',
+        'https://chatflows.com.br/',
         'https://chatflow-pq1hi2qqh-manoelduran.vercel.app/',
         'https://chatflow-git-main-manoelduran.vercel.app/'
     ];
