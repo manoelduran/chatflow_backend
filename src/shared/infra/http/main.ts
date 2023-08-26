@@ -1,8 +1,9 @@
 import 'express-async-errors';
 import 'reflect-metadata';
 import 'dotenv/config';
+import fs from 'fs';
 import express, { Express as Application } from 'express';
-import { createServer, Server as HttpServer } from "http";
+import { createServer, Server as HttpServer } from "https";
 import socketio from 'socket.io';
 import { router } from '@shared/infra/http/routes';
 import cors from 'cors';
@@ -29,7 +30,11 @@ class Main {
     public io: socketio.Server
     constructor() {
         this.app = express();
-        this.server = createServer(this.app);
+        this.server = createServer({
+            key: fs.readFileSync('key.pem'),
+            cert: fs.readFileSync('cert.pem')
+
+        }, this.app);
         this.io = new socketio.Server(this.server, {
             maxHttpBufferSize: 1e8,
             pingTimeout: 200000,
