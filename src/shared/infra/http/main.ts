@@ -19,6 +19,7 @@ class Main {
     private allowedOrigins: string[] = [
         'http://localhost:3000',
         'https://www.chatflows.com.br/',
+        'https://chatflow-e17l1n7iw-manoelduran.vercel.app/',
         'https://chatflows.com.br/',
         'https://chatflow-pq1hi2qqh-manoelduran.vercel.app/',
         'https://chatflow-git-main-manoelduran.vercel.app/'
