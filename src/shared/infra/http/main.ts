@@ -1,6 +1,7 @@
 import 'express-async-errors';
 import 'reflect-metadata';
 import 'dotenv/config';
+import fs from 'fs';
 import express, { Express as Application } from 'express';
 import { createServer, Server as HttpServer } from "http";
 import socketio from 'socket.io';
@@ -19,6 +20,7 @@ class Main {
     private allowedOrigins: string[] = [
         'http://localhost:3000',
         'https://www.chatflows.com.br/',
+        'https://chatflow-e17l1n7iw-manoelduran.vercel.app/',
         'https://chatflows.com.br/',
         'https://chatflow-pq1hi2qqh-manoelduran.vercel.app/',
         'https://chatflow-git-main-manoelduran.vercel.app/'
