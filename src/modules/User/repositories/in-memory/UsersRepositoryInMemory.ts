@@ -14,6 +14,20 @@ class UsersRepositoryInMemory implements IUsersRepository {
     constructor() {
         this.users = [];
     }
+    async findByEmail(email: string): Promise<Either<UserNotFoundException, UserModel>> {
+        const user = this.users.find(user => user.email === email);
+        if (!user) {
+            return left(new UserNotFoundException());
+        };
+        return right(user);
+    }
+    async findByWhere(username?: string, email?: string): Promise<Either<UserNotFoundException, UserModel>> {
+        const user = this.users.find(user => user.username === username || user.email === email);
+        if (!user) {
+            return left(new UserNotFoundException());
+        };
+        return right(user);
+    }
     async findByData(username: string, email: string): Promise<Either<UserNotFoundException, UserModel>> {
         const user = this.users.find(user => {
             user.username === username || user.email === email
@@ -34,6 +48,7 @@ class UsersRepositoryInMemory implements IUsersRepository {
         const newUser = new UserModel({
             ...data,
             id: uuidV4(),
+            isPremium: false,
             created_at: new Date()
         });
         Object.assign(newUser, data);
