@@ -6,23 +6,13 @@
     "strict": true,
     "strictPropertyInitialization": false,
     "baseUrl": "./src",
-    "rootDir": "./src",
+    "rootDir": "./",
     "paths": {
-      "@modules/*": [
-        "modules/*"
-      ],
-      "@config/*": [
-        "config/*"
-      ],
-      "@shared/*": [
-        "shared/*"
-      ],
-      "@errors/*": [
-        "errors/*"
-      ],
-      "@utils/*": [
-        "utils/*"
-      ]
+      "@modules/*": ["modules/*"],
+      "@config/*": ["config/*"],
+      "@shared/*": ["shared/*"],
+      "@errors/*": ["errors/*"],
+      "@utils/*": ["utils/*"]
     },
     "esModuleInterop": true,
     "experimentalDecorators": true,
@@ -33,6 +23,7 @@
     "allowSyntheticDefaultImports": true,
     "moduleResolution": "node",
     "pretty": true,
+    "resolveJsonModule": true,
     "sourceMap": true,
     "lib": ["esnext"],
     "declaration": true,
