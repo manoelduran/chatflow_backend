@@ -1,0 +1,24 @@
+name: Run Unit Tests
+run-name: ${{ github.actor }} is running unit tests 🚀
+
+on:
+  workflow_dispatch:
+  push:
+  jobs:
+    run-tests:
+      runs-on: ${{ matrix.os }}
+      strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+
+      steps:
+        - name: Checkout
+          users: actions/checkout@v3
+        - name: Setup Node
+          users: actions/setup-node@v3
+          with:
+            node-version: 18
+        - name: Install Dependencies
+          run: yarn install
+        - name: Run Tests
+          run: yarn test
