@@ -2,9 +2,9 @@ import "reflect-metadata";
 import { ChatsRepositoryInMemory } from "@modules/Chat/repositories/in-memory/ChatsRepositoryInMemory";
 import { GetChatService } from "./GetChatService";
 import { CreateChatService } from "../CreateChat/CreateChatService";
-import { UsersRepositoryInMemory } from "../../../../../dist/modules/User/repositories/in-memory/UsersRepositoryInMemory";
 import { ChatNotFoundException } from "@modules/Chat/exceptions/ChatNotFoundException";
 import { randomUUID } from "crypto";
+import { UsersRepositoryInMemory } from "@modules/User/repositories/in-memory/UsersRepositoryInMemory";
 
 let chatsRepositoryInMemory: ChatsRepositoryInMemory;
 let createChatService: CreateChatService;
