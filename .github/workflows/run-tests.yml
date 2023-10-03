@@ -2,7 +2,9 @@ name: Run Unit Tests on Multiple OS
 
 on:
   workflow_dispatch:
-  push:
+  pull_request:
+    branches:
+      - develop
 
 jobs:
   run-tests-ubuntu:
