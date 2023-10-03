@@ -2,7 +2,9 @@ name: TSC Check
 
 on:
   workflow_dispatch:
-  push:
+    pull_request:
+    branches:
+      - develop
 
 jobs:
   tsc-check:
