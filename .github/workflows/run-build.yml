@@ -2,13 +2,17 @@ name: Build
 
 on:
 
+
   pull_request:
     branches:
       - main
 
 jobs:
   build:
-    workflow_run: [run-tsc, run-tests]
+    workflow_run:
+      workflows: [run-tsc, run-tests]
+      types:
+      - completed
     runs-on: ubuntu-latest
 
     steps:
