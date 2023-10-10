@@ -22,14 +22,9 @@ jobs:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Tag Docker Image
-        run: echo ::set-output name=tag::$(git describe --abbrev=0)
-        id: tag
-        working-directory: .
-
       - name: Run TSC Check
         run: yarn tsc
 
       - name: Build Docker Image
-        run: docker build -t chatflow:${{ steps.tag.outputs.tag }}  .
+        run: docker build -t chatflow:latest  .
         working-directory: .
