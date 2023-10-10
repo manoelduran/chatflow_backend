@@ -7,10 +7,6 @@ on:
 
 jobs:
   build:
-    workflow_run:
-      workflows: [run-tsc, run-tests, run-build]
-      types:
-        - completed
     runs-on: ubuntu-latest
 
     steps:
