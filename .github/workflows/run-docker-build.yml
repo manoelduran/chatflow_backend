@@ -29,5 +29,8 @@ jobs:
         run: docker build -t chatflow:latest  .
         working-directory: .
 
+      - name: Tag Docker Image
+        run: docker tag chatflow:latest ${{ secrets.DOCKER_USERNAME }}/chatflow:latest
+
       - name: Push Docker Image
-        run: docker push chatflow:latest
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/chatflow:latest
