@@ -27,8 +27,8 @@ jobs:
         id: tag
         working-directory: .
 
-      - name: Build
-        run: yarn build
+      - name: Run TSC Check
+        run: yarn tsc
 
       - name: Build Docker Image
         run: docker build -t chatflow:${{ steps.tag.outputs.tag }}  .
