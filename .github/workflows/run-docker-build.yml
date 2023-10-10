@@ -35,8 +35,5 @@ jobs:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Tag Docker Image
-        run: docker tag chatflow:latest ${{ secrets.DOCKER_USERNAME }}/chatflow:latest
-
       - name: Push Docker Image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/chatflow:latest
