@@ -26,11 +26,11 @@ jobs:
         run: yarn tsc
 
       - name: Build Docker Image
-        run: docker build . -t manoelduran/chatflow
+        run: docker build . -t manoelduran/chatflow:latest
         working-directory: .
 
       - name: Push Docker Image
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/chatflow
+        run: docker push manoelduran/chatflow
 
       - name: Logout Docker Hub
         run: docker logout
