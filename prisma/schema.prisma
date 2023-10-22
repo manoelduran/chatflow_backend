@@ -23,6 +23,7 @@ model User {
   messages      Message[]
   card_token    String?         @unique
   created_at    DateTime        @default(now())
+  updated_at    DateTime        @default(now())
   UsersOnChats  UsersOnChats[]
   Chat          Chat[]
   PaymentMethod PaymentMethod[]
@@ -64,22 +65,25 @@ model Message {
 }
 
 model Address {
-  id          String @id @default(uuid())
-  city        String
-  country     String
-  line1       String
-  postal_code String
-  state       String
-  User        User?
+  id                        String   @id @default(uuid())
+  city                      String
+  country                   String
+  line1                     String
+  stripe_billing_address_id String?  @unique
+  postal_code               String
+  state                     String
+  created_at                DateTime @default(now())
+  User                      User?
 
   @@map("addresses")
 }
 
 model PaymentMethod {
-  id                       String  @id @default(uuid())
-  user                     User?   @relation(fields: [userId], references: [id])
+  id                       String   @id @default(uuid())
+  user                     User?    @relation(fields: [userId], references: [id])
   userId                   String?
   stripe_payment_method_id String
+  created_at               DateTime @default(now())
 
   @@map("paymentmethods")
 }

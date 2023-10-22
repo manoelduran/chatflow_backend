@@ -6,6 +6,7 @@ import { CreateCustomerResponse } from "../responses/Customer/CreateCustomerResp
 import { FindAllCustomersResponse } from "../responses/Customer/FindAllCustomersResponse";
 import { FindOneCustomerResponse } from "../responses/Customer/FindOneCustomerResponse";
 import { CreateCustomerException } from "../exceptions/Customer/CreateCustomerException";
+import { PutBillingAddressResponse } from "../responses/BillingAddress/PutBillingAddressResponse";
 
 class StripeProvider implements IGatewayProvider {
   private stripeApi = axios.create({
@@ -32,7 +33,24 @@ class StripeProvider implements IGatewayProvider {
       // Handle errors here, throw custom exceptions, etc.
     }
   }
-
+  public async putBillingAddress(
+    data: Stripe.AddressParam,
+    customer_id: string
+  ): PutBillingAddressResponse {
+    try {
+      console.log("entity", data, customer_id);
+      const updatedCustomer = await this.stripeApi.post(
+        `/v1/customers/${customer_id}`,
+        { address: data }
+      );
+      console.log("updatedCustomer", updatedCustomer);
+      return right(updatedCustomer.data);
+    } catch (error) {
+      console.log("ERRORR", error);
+      return left(new CreateCustomerException());
+      // Handle errors here, throw custom exceptions, etc.
+    }
+  }
   public async findAllCustomers({
     limit,
     expand,

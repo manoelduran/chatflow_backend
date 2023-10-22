@@ -6,11 +6,12 @@ class UserModel implements User {
   email: string;
   username: string;
   password: string;
-  card_token?: string;
-  customer_id?: string;
-  addressId?: string;
+  card_token!: string;
+  customer_id: string;
+  addressId!: string;
   isPremium: boolean;
   created_at: Date;
+  updated_at: Date;
   constructor(props: User) {
     if (!this.id) {
       this.id = uuidV4();
