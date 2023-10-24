@@ -17,12 +17,11 @@ class AddressesRepository implements IAddressesRepository {
   }
   public async findByWhere(
     id?: string,
-    postal_code?: string,
-    stripe_billing_address_id?: string
+    postal_code?: string
   ): Promise<Either<AddressNotFoundException, AddressModel>> {
     const foundAddress = await this.ormRepository.address.findFirst({
       where: {
-        OR: [{ id }, { postal_code }, { stripe_billing_address_id }],
+        OR: [{ id }, { postal_code }],
       },
     });
     if (!foundAddress) {

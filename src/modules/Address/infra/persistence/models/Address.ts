@@ -8,7 +8,6 @@ class AddressModel implements Address {
   line1: string;
   postal_code: string;
   state: string;
-  stripe_billing_address_id: string;
   created_at: Date;
   constructor(props: Address) {
     if (!this.id) {
