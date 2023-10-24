@@ -12,14 +12,21 @@ datasource db {
 }
 
 model User {
-  id           String         @id @default(uuid())
-  email        String         @unique
-  username     String         @unique
-  password     String
-  isPremium    Boolean        @default(false)
-  messages     Message[]
-  created_at   DateTime       @default(now())
-  UsersOnChats UsersOnChats[]
+  id            String          @id @default(uuid())
+  email         String          @unique
+  username      String          @unique
+  password      String
+  customer_id   String?         @unique
+  isPremium     Boolean         @default(false)
+  address       Address?        @relation(fields: [addressId], references: [id])
+  addressId     String?         @unique
+  messages      Message[]
+  card_token    String?         @unique
+  created_at    DateTime        @default(now())
+  updated_at    DateTime        @default(now())
+  UsersOnChats  UsersOnChats[]
+  Chat          Chat[]
+  PaymentMethod PaymentMethod[]
 
   @@map("users")
 }
@@ -27,6 +34,7 @@ model User {
 model Chat {
   id           String         @id @default(uuid())
   name         String         @unique
+  user         User           @relation(fields: [owner_id], references: [id])
   owner_id     String
   messages     Message[]
   created_at   DateTime       @default(now())
@@ -54,4 +62,27 @@ model Message {
   sentAt DateTime @default(now())
 
   @@map("messages")
+}
+
+model Address {
+  id          String   @id @default(uuid())
+  city        String
+  country     String
+  line1       String
+  postal_code String
+  state       String
+  created_at  DateTime @default(now())
+  User        User?
+
+  @@map("addresses")
+}
+
+model PaymentMethod {
+  id                       String   @id @default(uuid())
+  user                     User?    @relation(fields: [userId], references: [id])
+  userId                   String?
+  stripe_payment_method_id String
+  created_at               DateTime @default(now())
+
+  @@map("paymentmethods")
 }

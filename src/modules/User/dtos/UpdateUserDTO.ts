@@ -1,10 +1,11 @@
-interface CreateUserDTO {
+interface UpdateUserDTO {
   username: string;
   email: string;
   customer_id?: string;
   isPremium?: boolean;
+  addressId?: string;
   password: string;
-  created_at?: Date;
+  updated_at?: Date;
 }
 
-export { CreateUserDTO };
+export { UpdateUserDTO };
