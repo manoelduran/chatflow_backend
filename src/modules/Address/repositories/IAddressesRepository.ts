@@ -7,8 +7,7 @@ interface IAddressesRepository {
   create(data: CreateAddressDTO): Promise<AddressModel>;
   findByWhere(
     id?: string,
-    postal_code?: string,
-    stripe_billing_address_id?: string
+    postal_code?: string
   ): Promise<Either<AddressNotFoundException, AddressModel>>;
   list(): Promise<AddressModel[]>;
 }

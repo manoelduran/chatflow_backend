@@ -1,20 +1,25 @@
-import {AppError} from '@shared/errors/AppError';
-import { Request, Response, NextFunction } from 'express';
+import { AppError } from "@shared/errors/AppError";
+import { Request, Response, NextFunction } from "express";
 
 class HttpExceptionHandler {
-  public handle(exception: Error, request: Request, response: Response, _: NextFunction): Response {
+  public handle(
+    exception: Error,
+    request: Request,
+    response: Response,
+    _: NextFunction
+  ): Response {
     if (exception instanceof AppError) {
       return response.status(exception.statusCode).json({
-        status: 'error',
+        status: "error",
         message: exception.message,
       });
     }
 
     console.error(exception);
-console.log('excpetion', exception)
+
     return response.status(500).json({
-      status: 'error',
-      message: 'Falha interna no servidor.',
+      status: "error",
+      message: "Falha interna no servidor.",
     });
   }
 }

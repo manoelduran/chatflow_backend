@@ -3,5 +3,5 @@ import { CreateCustomerException } from "../../exceptions/Customer/CreateCustome
 import Stripe from "stripe";
 
 export type PutBillingAddressResponse = Promise<
-  Either<CreateCustomerException, Stripe.Response<Stripe.Address>>
+  Either<CreateCustomerException, Stripe.Response<Stripe.Customer>>
 >;

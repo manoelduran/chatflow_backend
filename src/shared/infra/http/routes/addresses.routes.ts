@@ -1,4 +1,3 @@
-import { ChatController } from "@modules/Chat/infra/http/controllers/ChatController";
 import { celebrate, Joi, Segments } from "celebrate";
 import { Router } from "express";
 import { ensureAuthenticated } from "@shared/infra/http/middlewares/ensureAuthenticated";

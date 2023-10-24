@@ -65,15 +65,14 @@ model Message {
 }
 
 model Address {
-  id                        String   @id @default(uuid())
-  city                      String
-  country                   String
-  line1                     String
-  stripe_billing_address_id String?  @unique
-  postal_code               String
-  state                     String
-  created_at                DateTime @default(now())
-  User                      User?
+  id          String   @id @default(uuid())
+  city        String
+  country     String
+  line1       String
+  postal_code String
+  state       String
+  created_at  DateTime @default(now())
+  User        User?
 
   @@map("addresses")
 }
